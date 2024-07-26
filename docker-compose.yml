@@ -1,0 +1,43 @@
+services:
+  mongo:
+    image: mongo:latest
+    container_name: mongodb
+    ports:
+      - "27017:27017"
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: example
+    networks:
+      - mynetwork
+
+  api-go:
+    build: .
+    container_name: api-go-teste
+    ports:
+      - "8080:8080"
+    networks:
+      - mynetwork
+    environment:
+      - SERVER_ADDRESS=mongodb://root:example@mongodb:27017
+      - DATABASE_URI=db_product
+    depends_on:
+      - mongo
+
+  # frontend:
+  #   build:
+  #     context: ./web/frontend
+  #     dockerfile: Dockerfile
+  #   container_name: myapp-frontend
+  #   ports:
+  #     - "3000:80"
+  #   volumes:
+  #     - ./web/frontend:/app
+  #   networks:
+  #     - mynetwork
+  #   depends_on:
+  #     - mongo
+  #     - api-go
+
+networks:
+  mynetwork:
+    driver: bridge
