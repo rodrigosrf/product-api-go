@@ -12,16 +12,18 @@ func RegisterProductRoutes(db *mongo.Database) {
 	r := gin.Default()
 
 	basePath := "/api/v1"
-
 	docs.SwaggerInfo.BasePath = basePath
 
 	InitializeHandler(db)
 
-	r.POST("/api/v1/product", CreateProduct)
-	r.GET("/api/v1/product", GetProducts)
-	r.GET("/products/:id", GetProductByID)
-	r.PUT("/products/:id", UpdateProduct)
-	r.DELETE("/products/:id", DeleteProduct)
+	productRoutes := r.Group(basePath + "/product")
+	{
+		productRoutes.POST("/", CreateProduct)
+		productRoutes.GET("/", GetProducts)
+		productRoutes.GET("/:id", GetProductByID)
+		productRoutes.PUT("/:id", UpdateProduct)
+		productRoutes.DELETE("/:id", DeleteProduct)
+	}
 
 	r.GET("/swagger/*any", ginSwagger.WrapHandler(swaggerfiles.Handler))
 

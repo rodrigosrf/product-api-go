@@ -40,7 +40,7 @@ func CreateProduct(c *gin.Context) {
 		return
 	}
 
-	newProduct.Code = uuid.New()
+	newProduct.Code = uuid.New().String()
 
 	ctx := context.Background()
 	err := repository.Create(ctx, &newProduct)
@@ -65,6 +65,7 @@ func CreateProduct(c *gin.Context) {
 // @Router       /api/v1/product [get]
 func GetProducts(c *gin.Context) {
 	ctx := context.Background()
+
 	products, err := repository.FindAll(ctx)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})

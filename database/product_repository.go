@@ -48,12 +48,8 @@ func (r *ProductRepository) FindAll(ctx context.Context) ([]models.Product, erro
 }
 
 func (r *ProductRepository) FindByID(ctx context.Context, id string) (*models.Product, error) {
-	objectId, err := primitive.ObjectIDFromHex(id)
-	if err != nil {
-		return nil, err
-	}
 	var product models.Product
-	err = r.collection.FindOne(ctx, bson.M{"_id": objectId}).Decode(&product)
+	err := r.collection.FindOne(ctx, bson.M{"code": id}).Decode(&product)
 	return &product, err
 }
 
